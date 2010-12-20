@@ -10,7 +10,7 @@ s7::s7(){
     QTextCodec::setCodecForTr( QTextCodec::codecForName("ISO-8859-9") );
     QTextCodec::setCodecForCStrings( QTextCodec::codecForName("ISO-8859-9") );
 
-    changeType(1);  // S7-300
+    changeType(0);  // S7-200
 
     libraryLoaded = false;
     socketOpened = false;

@@ -6,10 +6,6 @@
 using namespace std;
 
 s7::s7(){
-    // turkish char set support
-    QTextCodec::setCodecForTr( QTextCodec::codecForName("ISO-8859-9") );
-    QTextCodec::setCodecForCStrings( QTextCodec::codecForName("ISO-8859-9") );
-
     changeType(0);  // S7-200
 
     libraryLoaded = false;

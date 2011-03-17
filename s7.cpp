@@ -82,7 +82,10 @@ s7::s7(){
         if (daveClrBit) message += "daveClrBit ok.....\n";
         else message += "daveClrBit fail.....\n";
 
-        //char ch = '0'; buffer = new QByteArray(1024,ch); bufferPtr = &buffer[0];
+        daveGetS16from = (daveGetS16fromPtr) library->resolve("daveGetS16from");
+        if (daveGetFloatfrom) message += "daveGetS16from ok.....\n";
+        else message += "daveGetS16from fail.....\n";
+
         message += "------------------------------------------";
 
         message = MESSAGE0;
@@ -186,6 +189,59 @@ int s7::clrBit(int db, int byte, int bit){
             readResult = daveClrBit(conn, daveDB, db, byte, bit);
             status = readResult;
             message += "clear bit status: " + QString::number(status);
+
+        } catch (exception& e){
+            message += "READ ERROR....."+QString::fromUtf8(e.what());
+        }
+    }
+    return status;
+}
+
+int s7::readBytes(int db, int start, int length, unsigned char* buffer){
+    int status = ERROR_CODE;
+    message = "readbytes: not-interact";
+
+    if (plcInteract){
+        message = "readbytes: interact";
+        try{
+            readResult = daveReadBytes(conn, daveDB, db, start, length, buffer);
+            status = readResult;
+            message += "readbytes status: " + QString::number(status);
+
+        } catch (exception& e){
+            message += "READ ERROR....."+QString::fromUtf8(e.what());
+        }
+    }
+    return status;
+}
+
+int s7::getS16(unsigned char* buffer){
+    int status = ERROR_CODE;
+    message = "getS16: not-interact";
+
+    if (plcInteract){
+        message = "getS16: interact";
+        try{
+            readResult = daveGetS16from(buffer);
+            status = readResult;
+            message += "getS16 status: " + QString::number(status);
+
+        } catch (exception& e){
+            message += "READ ERROR....."+QString::fromUtf8(e.what());
+        }
+    }
+    return status;
+}
+
+float s7::getFloat(unsigned char* buffer){
+    float status = ERROR_CODE;
+    message = "getFloat: not-interact";
+
+    if (plcInteract){
+        message = "getFloat: interact";
+        try{
+            status = daveGetFloatfrom(buffer);
+            message += "getFloat status: " + QString::number(status);
 
         } catch (exception& e){
             message += "READ ERROR....."+QString::fromUtf8(e.what());

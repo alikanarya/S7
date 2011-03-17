@@ -34,13 +34,8 @@ class s7{
         daveInterface *intf;        // about interface
         daveConnection *conn;       // about connection
 
-        QByteArray *buffer;         // buffer for red data  ??
-        QByteArray *bufferPtr;      // buffer pointer       ??
         int readResult;             // read op. result
-
         QString message;            // status message of class
-
-
 
         s7();                               // constructor
         void changeType(int type);
@@ -50,6 +45,9 @@ class s7{
         int readBits(int db, int byte, int length);     // read bits from plc
         int setBit(int db, int byte, int bit);          // set bit of plc
         int clrBit(int db, int byte, int bit);          // clear bit of plc
+        int readBytes(int db, int start, int length, unsigned char* buffer);    // receive bytes from plc
+        int getS16(unsigned char* buffer);  // convert 2-bytes (big-endian) to SIGNED INTEGER
+        float getFloat(unsigned char* buffer);  // convert 4-bytes (big-endian) to FLOAT
 
     private:
 
@@ -98,6 +96,9 @@ class s7{
 
         typedef int (*daveClrBitPtr) (daveConnection*, int, int, int, int);
         daveClrBitPtr daveClrBit;
+
+        typedef int (*daveGetS16fromPtr) (unsigned char*);
+        daveGetS16fromPtr daveGetS16from;
         /* _________________________________________________________________________________________ */
 
 };

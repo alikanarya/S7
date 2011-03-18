@@ -86,6 +86,14 @@ s7::s7(){
         if (daveGetFloatfrom) message += "daveGetS16from ok.....\n";
         else message += "daveGetS16from fail.....\n";
 
+        davePutFloat = (davePutFloatPtr) library->resolve("davePutFloat");
+        if (davePutFloat) message += "davePutFloat ok.....\n";
+        else message += "davePutFloat fail.....\n";
+
+        daveWriteBytes = (daveWriteBytesPtr) library->resolve("daveWriteBytes");
+        if (daveWriteBytes) message += "daveWriteBytes ok.....\n";
+        else message += "daveWriteBytes fail.....\n";
+
         message += "------------------------------------------";
 
         message = MESSAGE0;
@@ -248,6 +256,40 @@ float s7::getFloat(unsigned char* buffer){
         }
     }
     return status;
+}
+
+int s7::writeBytes(int db, int start, int length, unsigned char* buffer){
+    int status = ERROR_CODE;
+    message = "writeBytes: not-interact";
+
+    if (plcInteract){
+        message = "writeBytes: interact";
+        try{
+            readResult = daveWriteBytes(conn, daveDB, db, start, length, buffer);
+            status = readResult;
+            message += "writeBytes status: " + QString::number(status);
+
+        } catch (exception& e){
+            message += "READ ERROR....."+QString::fromUtf8(e.what());
+        }
+    }
+    return status;
+}
+
+unsigned char* s7::putFloat(unsigned char* buffer, float var){
+    unsigned char* bytes;
+
+    message = "putFloat: not-interact";
+
+    if (plcInteract){
+        message = "putFloat: interact";
+        try{
+            bytes = davePutFloat(buffer, var);
+        } catch (exception& e){
+            message += "READ ERROR....."+QString::fromUtf8(e.what());
+        }
+    }
+    return bytes;
 }
 
 bool s7::disconnect(){

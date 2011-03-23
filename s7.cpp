@@ -99,6 +99,8 @@ s7::s7(){
         message = MESSAGE0;
     } else
         message = MESSAGE1;
+
+    portNum = 102;
 }
 
 void s7::changeType(int type){
@@ -121,7 +123,7 @@ bool s7::connect(const char* _peer){
         disconnect();   // if some connection before
 
         if (!socketOpened && !adapterInited && !plcConnected){
-            fds.rfd = openSocket(102, peer);     // open socket
+            fds.rfd = openSocket(portNum, peer);     // open socket
             fds.wfd = fds.rfd;
 
             message += " rfd: " + QString::number(fds.rfd) + ".....\n";

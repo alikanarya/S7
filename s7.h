@@ -26,6 +26,7 @@ class s7{
         bool plcInteract;           // true: plc can be accessed to read/write opearions.
 
         const char* peer;           // plc ip address
+        int portNum;                // socket port number
         int plcType;
         int plcProtocol;
 

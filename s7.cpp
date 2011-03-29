@@ -94,6 +94,10 @@ s7::s7(){
         if (daveWriteBytes) message += "daveWriteBytes ok.....\n";
         else message += "daveWriteBytes fail.....\n";
 
+        daveWriteBits = (daveWriteBitsPtr) library->resolve("daveWriteBits");
+        if (daveWriteBits) message += "daveWriteBits ok.....\n";
+        else message += "daveWriteBits fail.....\n";
+
         message += "------------------------------------------";
 
         message = MESSAGE0;
@@ -278,8 +282,26 @@ int s7::writeBytes(int db, int start, int length, unsigned char* buffer){
     return status;
 }
 
+int s7::writeBits(int db, int start, int length, void* buffer){
+    int status = ERROR_CODE;
+    message = "writeBits: not-interact";
+
+    if (plcInteract){
+        message = "writeBits: interact";
+        try{
+            readResult = daveWriteBits(conn, daveDB, db, start, length, buffer);
+            status = readResult;
+            message += "writeBits status: " + QString::number(status);
+
+        } catch (exception& e){
+            message += "READ ERROR....."+QString::fromUtf8(e.what());
+        }
+    }
+    return status;
+}
+
 unsigned char* s7::putFloat(unsigned char* buffer, float var){
-    unsigned char* bytes;
+    unsigned char* bytes = new unsigned char;
 
     message = "putFloat: not-interact";
 

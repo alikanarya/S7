@@ -51,6 +51,7 @@ class s7{
         float getFloat(unsigned char* buffer);  // convert 4-bytes (big-endian) to FLOAT
         unsigned char* putFloat(unsigned char* buffer, float var);  // convert float to 4-BYTES (big-endian)
         int writeBytes(int db, int start, int length, unsigned char* buffer);
+        int writeBits(int db, int start, int length, void* buffer);
 
     private:
 
@@ -105,6 +106,9 @@ class s7{
 
         typedef int (*daveWriteBytesPtr) (daveConnection*, int, int, int , int, void*);
         daveWriteBytesPtr daveWriteBytes;
+
+        typedef int (*daveWriteBitsPtr) (daveConnection*, int, int, int , int, void*);
+        daveWriteBitsPtr daveWriteBits;
 
         typedef unsigned char* (*davePutFloatPtr) (unsigned char*, float);
         davePutFloatPtr davePutFloat;

@@ -1,13 +1,13 @@
-#ifndef S7_H
+ï»¿#ifndef S7_H
 #define S7_H
 
-#define MESSAGE0 "Kütüphane yüklendi"
-#define MESSAGE1 "Kütüphane yüklenemedi!!! PLC kontrol kullanýlamayacaktýr."
-#define MESSAGE2 "PLC baðlantýsý OK....."
-#define MESSAGE3 "PLC'YE   B A Ð L A N I L A M I Y O R !!!"
-#define MESSAGE4 "PLC B A Ð L A N T I S I   K E S Ý L D Ý !!!"
-#define MESSAGE5 "Teknik Servis ile irtibata geçiniz."
-#define MESSAGE6 "PLC baðlantýsý kuruldu"
+#define MESSAGE0 "KÃ¼tÃ¼phane yÃ¼klendi"
+#define MESSAGE1 "KÃ¼tÃ¼phane yÃ¼klenemedi!!! PLC kontrol kullanÄ±lamayacaktÄ±r."
+#define MESSAGE2 "PLC baÄŸlantÄ±sÄ± OK....."
+#define MESSAGE3 "PLC'YE   B A Äž L A N I L A M I Y O R !!!"
+#define MESSAGE4 "PLC B A Äž L A N T I S I   K E S Ä° L D Ä° !!!"
+#define MESSAGE5 "Teknik Servis ile irtibata geÃ§iniz."
+#define MESSAGE6 "PLC baÄŸlantÄ±sÄ± kuruldu"
 
 #include <QLibrary>
 
@@ -36,7 +36,7 @@ class s7{
         daveConnection *conn;       // about connection
 
         int readResult;             // read op. result
-        QString message;            // status message of class
+        QString message = ".";      // status message of class
 
         s7();                               // constructor
         void changeType(int type);

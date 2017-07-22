@@ -4,8 +4,8 @@
 #define MESSAGE0 "Kütüphane yüklendi"
 #define MESSAGE1 "Kütüphane yüklenemedi!!! PLC kontrol kullanılamayacaktır."
 #define MESSAGE2 "PLC bağlantısı OK....."
-#define MESSAGE3 "PLC'YE   B A Ğ L A N I L A M I Y O R !!!"
-#define MESSAGE4 "PLC B A Ğ L A N T I S I   K E S İ L D İ !!!"
+#define MESSAGE3 "PLC'YE BAĞLANILAMIYOR!!!"
+#define MESSAGE4 "PLC BAĞLANTISI KESİLDİ!!!"
 #define MESSAGE5 "Teknik Servis ile irtibata geçiniz."
 #define MESSAGE6 "PLC bağlantısı kuruldu"
 

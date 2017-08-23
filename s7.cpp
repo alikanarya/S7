@@ -2,6 +2,7 @@
 
 #include <exception>
 #include <QTextCodec>
+#include <QDebug>
 
 using namespace std;
 
@@ -99,6 +100,7 @@ s7::s7(){
         else message += "daveWriteBits fail.....\n";
 
         message += "------------------------------------------";
+        //qDebug() << message;
 
         message = MESSAGE0;
     } else
@@ -133,16 +135,18 @@ bool s7::connect(const char* _peer){
             message += " rfd: " + QString::number(fds.rfd) + ".....\n";
 
             char x = '_';
-            char* _if1 = &x;
+            //char* _if1 = &x;
 
             if (fds.rfd > 0){   // socked openned
                 socketOpened = true;
-                intf = daveNewInterface(fds, _if1, 0, plcProtocol, daveSpeed187k);     // make a new interface
+                //intf = daveNewInterface(fds, _if1, 0, plcProtocol, daveSpeed187k);     // make a new interface
+                intf = daveNewInterface(fds, "IF1", 0, plcProtocol, daveSpeed187k);     // make a new interface
                 intf->timeout = 100000;      // timeout 100.000 nanosec = 100 msec
 
                 if (daveInitAdapter(intf) == 0){    // adapter initialized with the interface
                     adapterInited = true;
                     message += "init adapter ok.....\n";
+                    qDebug() << message << intf->protocol;
 
                     conn = daveNewConnection(intf, 2, 0, 2);    // make a new connection
                     if (daveConnectPLC(conn) == 0){             // connect to plc

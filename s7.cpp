@@ -23,6 +23,8 @@ s7::s7(){
 
     // resolve functions from library
     if (libraryLoaded){
+
+
         openSocket = (openSocketPtr) library->resolve("openSocket");
         if (openSocket) message = "openSocket ok.....\n";
         else message = "openSocket fail.....\n";
@@ -99,8 +101,50 @@ s7::s7(){
         if (daveWriteBits) message += "daveWriteBits ok.....\n";
         else message += "daveWriteBits fail.....\n";
 
+        daveSetDebug = (daveSetDebugPtr) library->resolve("daveSetDebug");
+        if (daveSetDebug) message += "daveSetDebug ok.....\n";
+        else message += "daveSetDebug fail.....\n";
+
+        _daveGetResponseISO_TCP = (_daveGetResponseISO_TCPPtr) library->resolve("_daveGetResponseISO_TCP");
+        if (_daveGetResponseISO_TCP) message += "_daveGetResponseISO_TCP ok.....\n";
+        else message += "_daveGetResponseISO_TCP fail.....\n";
+
+        stdread = (stdreadPtr) library->resolve("stdread");
+        if (stdread) message += "stdread ok.....\n";
+        else message += "stdread fail.....\n";
+
+        stdwrite = (stdwritePtr) library->resolve("stdwrite");
+        if (stdwrite) message += "stdwrite ok.....\n";
+        else message += "stdwrite fail.....\n";
+
+        _daveReturnOkDummy = (_daveReturnOkDummyPtr) library->resolve("_daveReturnOkDummy");
+        if (_daveReturnOkDummy) message += "_daveReturnOkDummy ok.....\n";
+        else message += "_daveReturnOkDummy fail.....\n";
+
+        _daveReturnOkDummy2 = (_daveReturnOkDummy2Ptr) library->resolve("_daveReturnOkDummy2");
+        if (_daveReturnOkDummy2) message += "_daveReturnOkDummy2 ok.....\n";
+        else message += "_daveReturnOkDummy2 fail.....\n";
+
+        _daveListReachablePartnersDummy = (_daveListReachablePartnersDummyPtr) library->resolve("_daveListReachablePartnersDummy");
+        if (_daveListReachablePartnersDummy) message += "_daveListReachablePartnersDummy ok.....\n";
+        else message += "_daveListReachablePartnersDummy fail.....\n";
+
+        _daveConnectPLCTCP = (_daveConnectPLCTCPPtr) library->resolve("_daveConnectPLCTCP");
+        if (_daveConnectPLCTCP) message += "_daveConnectPLCTCP ok.....\n";
+        else message += "_daveConnectPLCTCP fail.....\n";
+
+        _daveExchangeTCP = (_daveExchangeTCPPtr) library->resolve("_daveExchangeTCP");
+        if (_daveExchangeTCP) message += "_daveExchangeTCP ok.....\n";
+        else message += "_daveExchangeTCP fail.....\n";
+
+        setTimeOut = (setTimeOutPtr) library->resolve("setTimeOut");
+        if (setTimeOut) message += "setTimeOut ok.....\n";
+        else message += "setTimeOut fail.....\n";
+
         message += "------------------------------------------";
-        qDebug() << message;
+
+        qDebug().noquote() << message;
+        daveSetDebug(daveDebugAll);
 
         message = MESSAGE0;
     } else
@@ -134,20 +178,21 @@ bool s7::connect(const char* _peer){
 
             message += " rfd: " + QString::number(fds.rfd) + ".....\n";
 
-            char x = '_';
-            char* _if1 = &x;
+            char x = '_';   char* _if1 = &x;
+            //char name ='m';
 
             if (fds.rfd > 0){   // socked openned
                 socketOpened = true;
-                intf = daveNewInterface(fds, _if1, 0, plcProtocol, daveSpeed187k);     // make a new interface
-                //intf = daveNewInterface(fds, '1', 0, plcProtocol, daveSpeed187k);     // make a new interface
+                intf = daveNewInterfaceXYZ(fds, _if1, 0, plcProtocol, daveSpeed187k);     // make a new interface
+                //qDebug() << QString("%s %d").arg(*_if1).arg(fds.wfd);
+
+                //intf = daveNewInterface(fds, &name, 0, plcProtocol, daveSpeed187k);     // make a new interface
                 intf->timeout = 100000;      // timeout 100.000 nanosec = 100 msec
 
                 if (daveInitAdapter(intf) == 0){    // adapter initialized with the interface
                     adapterInited = true;
                     message += "init adapter ok.....\n";
-                    qDebug() << message << intf->protocol;
-
+                    //qDebug() << message << intf->realName;
 
                     conn = daveNewConnection(intf, 2, 0, 2);    // make a new connection
 
@@ -349,6 +394,7 @@ bool s7::disconnect(){
     message = MESSAGE4;
     return plcInteract;
 }
+
 
 //readResult = daveReadBytes(conn,daveDB,1,5000,4,NULL);
 //var = daveGetFloat(conn); double v = var; message += "V-MEM: " + QString::number(v) + ".....\n";

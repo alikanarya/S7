@@ -1,5 +1,8 @@
 #ifndef S7TYPES_H
 #define S7TYPES_H
+
+//#define BCCWIN 		// if you work on windows
+
 //#define HANDLE int
 #define tmotype int
 #define daveMaxRawLen 2048
@@ -17,6 +20,30 @@
 #define daveSpeed93k    6
 
 #define daveDB 0x84	/* data blocks */
+
+/*    Some definitions for debugging:   */
+#define daveDebugRawRead  	0x01	/* Show the single bytes received */
+#define daveDebugSpecialChars  	0x02	/* Show when special chars are read */
+#define daveDebugRawWrite	0x04	/* Show the single bytes written */
+#define daveDebugListReachables 0x08	/* Show the steps when determine devices in MPI net */
+#define daveDebugInitAdapter 	0x10	/* Show the steps when Initilizing the MPI adapter */
+#define daveDebugConnect 	0x20	/* Show the steps when connecting a PLC */
+#define daveDebugPacket 	0x40
+#define daveDebugByte 		0x80
+#define daveDebugCompare 	0x100
+#define daveDebugExchange 	0x200
+#define daveDebugPDU 		0x400	/* debug PDU handling */
+#define daveDebugUpload		0x800	/* debug PDU loading program blocks from PLC */
+#define daveDebugMPI 		0x1000
+#define daveDebugPrintErrors	0x2000	/* Print error messages */
+#define daveDebugPassive 	0x4000
+
+#define daveDebugErrorReporting	0x8000
+#define daveDebugOpen		0x10000  /* print messages in openSocket and setPort */
+
+#define daveDebugAll 0x1ffff
+
+#define daveProtoISOTCPR 124	/* ISO over TCP with Routing */
 
 typedef struct dost {
     int rfd;
@@ -119,6 +146,5 @@ struct _daveInterface {
     _writeFunc ifwrite;
     int seqNumber;
 };
-
 
 #endif // S7TYPES_H

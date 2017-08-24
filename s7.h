@@ -12,6 +12,7 @@
 #include <QLibrary>
 
 #include "s7types.h"
+//#include "nodave.h"
 
 #define ERROR_CODE -12345
 
@@ -52,6 +53,50 @@ class s7{
         unsigned char* putFloat(unsigned char* buffer, float var);  // convert float to 4-BYTES (big-endian)
         int writeBytes(int db, int start, int length, unsigned char* buffer);
         int writeBits(int db, int start, int length, void* buffer);
+
+        daveInterface* daveNewInterfaceXYZ(_daveOSserialType nfd, char * nname, int localMPI, int protocol, int speed){
+            daveInterface * di=(daveInterface *) calloc(1, sizeof(daveInterface));
+        /*
+            LOG7("daveNewInterface(fd.rfd:%d fd.wfd:%d name:%s local MPI:%d protocol:%d PB speed:%d)\n",
+            nfd.rfd,nfd.wfd,nname, localMPI, protocol, speed);
+            FLUSH;
+        */
+            if (di) {
+        //	di->name=nname;
+            strncpy(di->realName,nname,20);
+            di->name=di->realName;
+            di->fd=nfd;
+            di->localMPI=localMPI;
+            di->protocol=protocol;
+            di->timeout=1000000; /* 1 second */
+            di->nextConnection=0x14;
+            di->speed=speed;
+
+            di->getResponse=_daveGetResponseISO_TCP;
+            di->ifread=stdread;
+            di->ifwrite=stdwrite;
+            di->initAdapter=_daveReturnOkDummy;
+            di->connectPLC=_daveReturnOkDummy2;
+            di->disconnectPLC=_daveReturnOkDummy2;
+            di->disconnectAdapter=_daveReturnOkDummy;
+            di->listReachablePartners=_daveListReachablePartnersDummy;
+            switch (protocol) {
+
+                case daveProtoISOTCP:
+                case daveProtoISOTCP243:
+                case daveProtoISOTCPR:	// routing over MPI network
+                di->getResponse=_daveGetResponseISO_TCP;
+                di->connectPLC=_daveConnectPLCTCP;
+                di->exchange=_daveExchangeTCP;
+                break;
+
+            }
+        //#ifdef BCCWIN
+            //setTimeOut(di, di->timeout);
+        //#endif
+            }
+            return di;
+        }
 
     private:
 
@@ -112,8 +157,39 @@ class s7{
 
         typedef unsigned char* (*davePutFloatPtr) (unsigned char*, float);
         davePutFloatPtr davePutFloat;
+
+        typedef void (*daveSetDebugPtr) (int);
+        daveSetDebugPtr daveSetDebug;
+
+        typedef int (*_daveGetResponseISO_TCPPtr) (daveConnection*);
+        _daveGetResponseISO_TCPPtr _daveGetResponseISO_TCP;
+
+        typedef int (*stdreadPtr) (daveInterface*, char*, int);
+        stdreadPtr stdread;
+
+        typedef int (*stdwritePtr) (daveInterface*, char*, int);
+        stdwritePtr stdwrite;
+
+        typedef int (*_daveReturnOkDummyPtr) (daveInterface*);
+        _daveReturnOkDummyPtr _daveReturnOkDummy;
+
+        typedef int (*_daveReturnOkDummy2Ptr) (daveConnection*);
+        _daveReturnOkDummy2Ptr _daveReturnOkDummy2;
+
+        typedef int (*_daveListReachablePartnersDummyPtr) (daveInterface*, char*);
+        _daveListReachablePartnersDummyPtr _daveListReachablePartnersDummy;
+
+        typedef int (*_daveConnectPLCTCPPtr) (daveConnection*);
+        _daveConnectPLCTCPPtr _daveConnectPLCTCP;
+
+        typedef int (*_daveExchangeTCPPtr) (daveConnection*, PDU*);
+        _daveExchangeTCPPtr _daveExchangeTCP;
+
+        typedef void (*setTimeOutPtr) (daveInterface*, int);
+        setTimeOutPtr setTimeOut;
         /* _________________________________________________________________________________________ */
 
 };
+
 
 #endif // S7_H

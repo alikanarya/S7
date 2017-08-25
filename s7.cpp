@@ -137,14 +137,14 @@ s7::s7(){
         if (_daveExchangeTCP) message += "_daveExchangeTCP ok.....\n";
         else message += "_daveExchangeTCP fail.....\n";
 
-        setTimeOut = (setTimeOutPtr) library->resolve("setTimeOut");
+        setTimeOut = (setTimeOutPtr) library->resolve("daveSetTimeout");
         if (setTimeOut) message += "setTimeOut ok.....\n";
         else message += "setTimeOut fail.....\n";
 
         message += "------------------------------------------";
 
-        qDebug().noquote() << message;
-        daveSetDebug(daveDebugAll);
+        //qDebug().noquote() << message;
+        //daveSetDebug(daveDebugAll);
 
         message = MESSAGE0;
     } else

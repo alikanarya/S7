@@ -24,7 +24,6 @@ s7::s7(){
     // resolve functions from library
     if (libraryLoaded){
 
-
         openSocket = (openSocketPtr) library->resolve("openSocket");
         if (openSocket) message = "openSocket ok.....\n";
         else message = "openSocket fail.....\n";
@@ -184,7 +183,7 @@ bool s7::connect(const char* _peer){
             if (fds.rfd > 0){   // socked openned
                 socketOpened = true;
                 intf = daveNewInterfaceXYZ(fds, _if1, 0, plcProtocol, daveSpeed187k);     // make a new interface
-                //qDebug() << QString("%s %d").arg(*_if1).arg(fds.wfd);
+                qDebug() << message << QString("%s %d").arg(*_if1).arg(fds.wfd);
 
                 //intf = daveNewInterface(fds, &name, 0, plcProtocol, daveSpeed187k);     // make a new interface
                 intf->timeout = 100000;      // timeout 100.000 nanosec = 100 msec
